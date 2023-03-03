@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>blackjack</title>
+    <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+    
+    
+    
+
+    <div class="center-screen" style="max-height:100vh;">
+
+
+        
+        <div class="window">
+
+            <div class="demo">
+                <span>[dealer]</span>
+                <span><p3 id="money"></p3></span>
+                <span>[player]</span>
+            </div>
+            
+            <div class="demo">
+                <span><p3 id="dealerCount"></p3></span>
+                <span></span>
+                <span><p3 id="playerCount"></p3></span>
+            </div>
+
+
+            
+        </div>
+
+        
+        <div class="window" style="padding-top:45px;padding-bottom:15px;">
+
+
+            
+
+
+            
+            <div style="height:100px;">
+                <div class="demo" style="text-align:center;">
+                    <span><pre><p3 id="dealerCards"></p3></pre></span>
+                    <span style="width:20%;"><p3 id="result"></p3></span>
+                    <span><pre><p3 id="playerCards"></p3></pre></span>
+                </div>
+            </div>
+
+
+            <div class="demo" style="text-align:center;">
+                <span></span>
+                <span><p3 id="bet"></p3></span>
+                <span></span>
+            </div>
+
+            
+
+        </div>
+
+
+
+
+
+
+        
+
+        
+        
+
+
+        
+        <div class="hit-stand">
+            <div class="demo">
+                <span><input id="hit" type="button" class="clear" value="[ hit ]" onclick="hit();" /></span>
+                <span></span>
+                <span><input id="stand" type="button" class="clear" value="[ stand ]" onclick="stand();" /></span>
+            </div>
+        </div>
+
+        <div id="screen" class="center-open" style="position:absolute;height:100vh;width:100vw;">
+            <input id="play" type="button" value="[ play ]" class="opener" onclick="playGame();" />
+        </div>
+
+        
+
+        <div class="window">
+            <div class="demo">
+                <span>[game]</span>
+                <span>[wins]</span>
+                <span>[losses]</span>
+            </div>
+            <div class="demo">
+                <span><p3 id="gameNumber"></p3></span>
+                <span><p3 id="wins"></p3></span>
+                <span><p3 id="losses"></p3></span>
+            </div>
+        </div>
+
+
+
+    </div>
+
+    
+    <!--<canvas id="bg" style="position:absolute;top:0;"></canvas>-->
+
+    <!--<script type="module" src="background.js"></script>-->
+
+
+    <script type="module">
+
+
+
+
+        var dealer = 0;
+        var dace = 0;
+        var player = 0;
+        var pace = 0;
+
+        var game = 0;
+        var wins = 0;
+        var losses = 0;
+
+        var money = 100;
+        var bet = 0;
+
+        const dealerCards = [];
+        const playerCards = [];
+
+        var dcn = 0;
+        var pcn = 0;
+
+
+        
+
+        document.getElementById("dealerCount").innerHTML = "";
+        document.getElementById("playerCount").innerHTML = "";
+
+        /*
+        document.getElementById("dealerButton").onclick = dealDealer;
+        document.getElementById("playerButton").onclick = dealPlayer;
+        */
+
+        document.getElementById("hit").onclick = hit;
+        document.getElementById("stand").onclick = stand;
+
+        document.getElementById("play").onclick = playGame;
+
+        /*
+        var el = document.getElementById("clickMe");
+        if (el.addEventListener)
+            el.addEventListener("click", doFunction, false);
+        else if (el.attachEvent)
+            el.attachEvent('onclick', doFunction);
+        */
+
+        /*
+        while (game < 4) {
+
+            // deal player cards
+
+            console.log("\n[GAME] " + game);
+            while (dealer < 17) {
+                var card = dealCard();
+                dealer += card;
+                dealerCards[dcn] = card;
+                dcn ++;
+                printDealer();
+                var input = prompt("continue");
+                console.log(input);
+
+            }
+            dcn = 0;
+            console.log("\ndealer " + dealer);
+            resetTable();
+        }
+        */
+
+        function playGame() {
+            resetTable();
+            dealDealerInitial();
+            dealPlayerInitial();
+        }
+
+        function hit() {
+            dealPlayer();
+            if (player > 21) {
+                stand();
+            }
+        }
+
+        function stand() {
+            document.getElementById("dealerCards").innerHTML = printDealer();
+            document.getElementById("dealerCount").innerHTML = dealer;
+            var result;
+            while (dealer < 17) {
+                dealDealer();
+            }
+            if (player > 21) {
+                result = "loss";
+                losses++;
+            } else if (player == dealer && player <= 21) {
+                result = "push";
+            } else if (dealer <= 21 && dealer > player && player <= 21) {
+                result = "loss";
+                losses++;
+            } else if (player <= 21 && player > dealer) {
+                result = "win";
+                wins++;
+            } else {
+                result = "win";
+                wins++;
+            }
+            if (result == "win" && player == 21) {
+                bet *= 2.5;
+            } else if (result == "win") {
+                bet *= 2;
+            } else if (result == "push") {
+                bet = 10;
+            } else {
+                bet = 0;
+            }
+            document.getElementById("bet").innerHTML = bet;
+            document.getElementById("result").innerHTML = result;
+            console.log("[player] " + player + " [dealer] " + dealer + " [result] " + result);
+            setTimeout(() => playGame(), 1000);
+        }
+
+        function dealDealer() {
+            var card = dealCard();
+            dealerCards[dcn] = card;
+            dcn++;
+            console.log("dealer pre card " + dealer);
+            dealer += card;
+            console.log("card " + card);
+            console.log("dealer post card " + dealer);
+            if (dealer <= 21) {
+                document.getElementById("dealerCount").innerHTML = dealer;
+            } else {
+                document.getElementById("dealerCount").innerHTML = "bust";
+            }
+            document.getElementById("dealerCards").innerHTML = printDealer();
+        }
+
+        function dealPlayer() {
+            var card = dealCard();
+            playerCards[pcn] = card;
+            pcn++;
+            console.log("player pre card " + player);
+            player += card;
+            console.log("card " + card);
+            console.log("player post card " + player);
+            if (player <= 21) {
+                document.getElementById("playerCount").innerHTML = player;
+            } else {
+                document.getElementById("playerCount").innerHTML = "bust";
+            }
+            document.getElementById("playerCards").innerHTML = printPlayer();
+        }
+
+        function dealDealerInitial() {
+            var card = dealCard();
+            dealerCards[dcn] = card;
+            dcn++;
+            dealer += card;
+            printDealer();
+            card = dealCard();
+            dealerCards[dcn] = card;
+            dcn++;
+            dealer += card;
+            
+            var x = dealerCards[dcn - 1];
+            if (x == 10) {
+                var face = Math.floor(Math.random() * 4) + 1;
+                if (face == 1) {
+                    x = "J";
+                } else if (face == 2) {
+                    x = "Q";
+                } else if (face == 3) {
+                    x = "K";
+                } else if (face == 4) {
+                    x = "X";
+                }
+            } else if (x > 10) {
+                x = "A";
+            }
+            document.getElementById("dealerCards").innerHTML = "[?]<br>&#x20;&#x20;&#x20;&#x20;[" + x + "] ";
+            document.getElementById("dealerCount").innerHTML = "";
+            
+        }
+
+        function dealPlayerInitial() {
+            var card = dealCard();
+            playerCards[pcn] = card;
+            pcn++;
+            player += card;
+            printPlayer();
+            card = dealCard();
+            playerCards[pcn] = card;
+            pcn++;
+            player += card;
+            document.getElementById("playerCount").innerHTML = player;
+            document.getElementById("playerCards").innerHTML = printPlayer();
+        }
+
+        
+
+
+
+
+        function resetTable() {
+            const dealerCards = [];
+            const playerCards = [];
+            money += bet;
+            money -= 10;
+            bet = 10;
+            dealer = 0;
+            player = 0;
+            dace = 0;
+            pace = 0;
+            dcn = 0;
+            pcn = 0;
+            wins;
+            losses;
+            game++;
+            document.getElementById("result").innerHTML = null;
+            document.getElementById("gameNumber").innerHTML = game;
+            document.getElementById("wins").innerHTML = wins;
+            document.getElementById("losses").innerHTML = losses;
+            document.getElementById("money").innerHTML = money;
+            document.getElementById("bet").innerHTML = bet;
+            if (document.getElementById("screen") != null) {
+                document.getElementById("screen").remove();
+            }
+        }
+
+        function dealCard() {
+            var card = Math.floor(Math.random() * 13) + 1;
+            //console.log(card);
+            if (card > 10) {
+                card = 10;
+            }
+            if (card == 1) {
+                dace++;
+                card = 11;
+            }
+            return card;
+        }
+
+
+        function printDealer() {
+            var string = "";
+            var x = dealerCards[dcn - 1];
+            if (x == 10) {
+                var face = Math.floor(Math.random() * 4) + 1;
+                if (face == 1) {
+                    x = "J";
+                } else if (face == 2) {
+                    x = "Q";
+                } else if (face == 3) {
+                    x = "K";
+                } else if (face == 4) {
+                    x = "X";
+                }
+            } else if (x > 10) {
+                x = "A";
+            }
+            dealerCards[dcn - 1] = x;
+            var space = "";
+            for ( var i = 0; i < dcn; i++ ) {
+                space += "&#x20;&#x20;&#x20;&#x20;";
+                var c = dealerCards[i];
+                string += "[" +  c + "]<br>" + space;
+            }
+            console.log(string);
+            return string;
+        }
+
+        function printPlayer() {
+            var string = "";
+            var x = playerCards[pcn - 1];
+            if (x == 10) {
+                var face = Math.floor(Math.random() * 4) + 1;
+                if (face == 1) {
+                    x = "J";
+                } else if (face == 2) {
+                    x = "Q";
+                } else if (face == 3) {
+                    x = "K";
+                } else if (face == 4) {
+                    x = "X";
+                }
+            } else if (x > 10) {
+                x = "A";
+            }
+            playerCards[pcn - 1] = x;
+            var space = "";
+            for ( var i = 0; i < pcn; i++ ) {
+                space += "&#x20;&#x20;&#x20;&#x20;";
+                var c = playerCards[i];
+                string += "[" +  c + "]<br>" + space;
+            }
+            console.log(string);
+            return string;
+        }
+
+        
+    </script>
+
+
+    <script type="module">
+        //import './style.css';
+        import * as THREE from 'https://cdn.skypack.dev/three@0.86.0';
+        //import * as THREE from 'three';
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({
+            canvas: document.querySelector('#bg'),
+        });
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.position.setZ(30);
+        renderer.render(scene, camera);
+
+        const geometry = new THREE.TorusGeometry(40, 20, 50, 100);
+        const sphere = new THREE.SphereGeometry(10, 20, 20);
+        const material = new THREE.MeshBasicMaterial({ color: 0xedebeb })
+        material.wireframe = true;
+
+        const ring = new THREE.Mesh(geometry, material);
+        scene.add(ring);
+        ring.position.z = 10;
+        ring.position.x = 5;
+
+        // lighting
+        const pointLight = new THREE.PointLight(0xffffff);
+        pointLight.position.set(0, 0, 0);
+        const ambientLight = new THREE.AmbientLight(0xffffff);
+        scene.add(pointLight, ambientLight);
+
+        // background color
+        scene.background = new THREE.Color( 0xffffff );
+
+        function moveCamera() {
+            const t = document.body.getBoundingClientRect().top;
+            ring.position.x = t * -0.01;
+            ring.position.y = t * -0.01;
+        }
+
+        document.body.onscroll = moveCamera;
+        moveCamera();
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            ring.rotation.z += 0.005;
+            ring.rotation.y += 0.001;
+            ring.rotation.x += 0.002;
+
+            renderer.render(scene, camera);
+        }
+        animate();
+    </script>
+
+
+
+    
+</body>
+</html>

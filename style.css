@@ -1,0 +1,151 @@
+body {
+    font-family: monospace;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    margin: 0px 0px;
+    padding: 0px 0px;
+}
+
+.center-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh;
+    background-color: rgba(255, 255, 255, 0);
+    flex-direction: column;
+    margin: auto;
+    max-width: 1000px;
+  }
+  .center-open {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh;
+    background-color: rgb(255, 255, 255);
+    flex-direction: column;
+    margin: auto;
+  }
+
+.window {
+    background-color:rgba(0, 0, 0, 0.301);
+    width:40%;
+    padding:15px 30px;
+    border-radius: 10px;
+    transition: 1s ease-out;
+    margin-top: 10px;
+}
+.window:hover {
+    background-color:rgba(0, 0, 0, 0.395);
+}
+.hit-stand {
+    background-color:rgba(0, 0, 0, 0.301);
+    width:40%;
+    padding:15px 30px;
+    border-radius: 10px;
+    transition: 1s ease-out;
+    margin-top: 10px;
+}
+.hit-stand:hover {
+    background-color:rgba(0, 0, 0, 0.395);
+}
+
+.demo {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+.demo span {
+    display: table-cell;
+    text-align: center;
+}
+
+.clear {
+    background: none;
+    border-radius: 5px;
+    padding-top: 5px;
+    padding-bottom:5px;
+    width: 100%;
+    border: none;
+    transition: .3s ease-out;
+    color:black;
+}
+
+.clear:hover {
+    background-color: rgba(255, 255, 255, 0.686);
+}
+
+.opener {
+    background-color: rgba(0, 0, 0, 0.183);
+    border-radius: 5px;
+    height: 100px;
+    width: 100px;
+    border: none;
+    transition: .3s ease-out;
+    color:black;
+}
+.opener:hover {
+    background-color: rgba(0, 0, 0, 0.314);
+}
+
+.screen {
+    -webkit-filter: blur(5px);
+    -moz-filter: blur(5px);
+    -o-filter: blur(5px);
+    -ms-filter: blur(5px);
+    filter: blur(5px);
+    width: 100px;
+    height: 100px;
+    background-color: #ccc;
+}
+
+button {
+    border-radius: 0px;
+}
+
+@media only screen and (max-width: 600px) {
+    body {
+      font-size: 9px;
+    }
+
+    .window {
+        background-color:rgba(0, 0, 0, 0.301);
+        width:60%;
+        padding:15px 30px;
+        border-radius: 10px;
+        transition: 1s ease-out;
+        margin-top: 10px;
+    }
+    .window:hover {
+        background-color:rgba(0, 0, 0, 0.395);
+    }
+
+
+    .clear {
+        background: none;
+        border-radius: 0px;
+        padding-top: 5px;
+        padding-bottom:5px;
+        width: 75%;
+        border: none;
+        transition: .5s ease-out;
+        color:black;
+    }
+    .clear:hover {
+        background-color: rgba(0, 0, 0, 0);
+        border-radius: 0px;
+    }
+
+    .hit-stand {
+        background-color:rgba(0, 0, 0, 0.301);
+        width:80%;
+        padding:10px 30px;
+        border-radius: 10px;
+        transition: 1s ease-out;
+        margin-top: 10px;
+        position: absolute;
+        bottom: 10px;
+        /*bottom: 90px;*/
+    }
+  }
